@@ -1,0 +1,63 @@
+🚨 Spam Examples
+1 — Prize Winner Scam
+Sender:  winner@mega-prize-global.com
+Subject: 🎉 YOU HAVE BEEN SELECTED AS OUR LUCKY WINNER!
+Body:    Congratulations! You have won $1,000,000 in our international lottery. 
+         Click here immediately to claim your free cash prize before it expires. 
+         Act now! Limited time offer. Send your bank details to claim your reward.
+
+2 — Pharma Spam
+Sender:  deals@cheapmeds-online.net
+Subject: Buy Viagra & Cialis - 80% OFF! No prescription needed
+Body:    Cheap medications delivered to your door. Buy now and get free shipping. 
+         Guaranteed lowest price online. No doctor needed. 
+         Click here for discount pills. Special offer ends tonight!
+
+3 — Nigerian Prince / Advance Fee
+Sender:  prince.daniel@nigerianroyal.org
+Subject: URGENT - Confidential Business Proposal - $45 Million USD
+Body:    Dear friend, I am the son of a deposed Nigerian king. 
+         I need your help to transfer $45 million USD out of the country. 
+         You will receive 30% commission. Send me your bank account details urgently. 
+         This is 100% guaranteed and risk free. God bless you.
+
+4 — Phishing / Account Suspended
+Sender:  security@paypa1-alerts.com
+Subject: URGENT: Your PayPal account has been suspended!
+Body:    We have detected unusual activity on your account. 
+         Your account access is limited. Click here to verify your identity immediately 
+         or your account will be permanently closed within 24 hours. 
+         Enter your credit card details to restore access now.
+
+5 — Work From Home Scam
+Sender:  jobs@easy-money-online.biz
+Subject: Earn $5000 per week working from home - No experience needed!
+Body:    Make fast easy money from home. We guarantee $5000 weekly income. 
+         No experience required. Free signup. Buy our course now at a discount 
+         and start earning cash immediately. Limited slots available. 
+         Click here to claim your free money making kit!
+
+✅ Ham (Normal) Examples
+6 — Work Meeting
+Sender:  sarah.johnson@company.com
+Subject: Team sync - Thursday 3pm
+Body:    Hey everyone, just a reminder that we have our weekly team sync 
+         this Thursday at 3pm in Conference Room B. 
+         Please come prepared with your project updates. 
+         Let me know if you can't make it. Thanks!
+
+7 — Friend / Casual
+Sender:  mike@gmail.com
+Subject: Dinner plans this weekend?
+Body:    Hey! Are you free this Saturday evening? 
+         A few of us are thinking of trying that new Italian place downtown. 
+         Let me know if you want to join, we are thinking around 7pm. 
+         Hope to see you there!
+
+8 — Order Confirmation
+Sender:  orders@amazon.com
+Subject: Your order has been shipped
+Body:    Hi, your recent order #112-4857234-9823456 has been shipped. 
+         Your package is expected to arrive by Friday between 8am and 8pm. 
+         You can track your delivery using the link in your account. 
+         Thank you for shopping with us.
