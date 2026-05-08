@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spam Classifier</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+    header {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white; padding: 20px 40px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    header h1 { font-size: 1.6rem; }
+    header span { font-size: 2rem; }
+
+    .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+    .card {
+      background: white; border-radius: 12px;
+      padding: 28px; margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .card h2 { font-size: 1.1rem; color: #333; margin-bottom: 18px; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; }
+
+    input, textarea {
+      width: 100%; padding: 10px 14px; margin-bottom: 12px;
+      border: 1px solid #ddd; border-radius: 8px;
+      font-size: 0.95rem; outline: none; transition: border 0.2s;
+    }
+    input:focus, textarea:focus { border-color: #4f46e5; }
+    textarea { height: 120px; resize: vertical; }
+
+    button {
+      background: #4f46e5; color: white; border: none;
+      padding: 11px 28px; border-radius: 8px; font-size: 0.95rem;
+      cursor: pointer; transition: background 0.2s;
+    }
+    button:hover { background: #4338ca; }
+    button.danger { background: #ef4444; }
+    button.danger:hover { background: #dc2626; }
+
+    .result {
+      margin-top: 16px; padding: 16px; border-radius: 8px;
+      display: none; font-size: 1rem;
+    }
+    .result.spam { background: #fef2f2; border: 1px solid #fca5a5; color: #b91c1c; }
+    .result.ham  { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+
+    .badge {
+      display: inline-block; padding: 4px 12px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 600; margin-left: 8px;
+    }
+    .badge.spam { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+    .badge.ham  { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    .stat-box {
+      text-align: center; padding: 18px; border-radius: 10px; background: #f8f9ff;
+    }
+    .stat-box .num { font-size: 2rem; font-weight: 700; color: #4f46e5; }
+    .stat-box .lbl { font-size: 0.8rem; color: #666; margin-top: 4px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th { background: #f8f9ff; padding: 10px 12px; text-align: left; color: #555; }
+    td { padding: 10px 12px; border-bottom: 1px solid #f0f2f5; }
+    tr:hover td { background: #fafafa; }
+
+    .loading { color: #888; font-size: 0.9rem; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span>🛡️</span>
+  <div>
+    <h1>Spam Email Classifier</h1>
+    <small style="opacity:0.7">Powered by Naive Bayes + Django</small>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Classify -->
+  <div class="card">
+    <h2>🔍 Classify an Email</h2>
+    <input id="sender"  type="text"  placeholder="Sender email (optional)" />
+    <input id="subject" type="text"  placeholder="Email subject" />
+    <textarea id="body" placeholder="Email body..."></textarea>
+    <button onclick="classify()">Classify Email</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="card">
+    <h2>📊 Statistics <button onclick="loadStats()" style="float:right;padding:6px 14px;font-size:0.8rem">Refresh</button></h2>
+    <div class="stats-grid" id="stats">
+      <div class="stat-box"><div class="num" id="s-total">—</div><div class="lbl">Total</div></div>
+      <div class="stat-box"><div class="num" id="s-spam" style="color:#ef4444">—</div><div class="lbl">Spam</div></div>
+      <div class="stat-box"><div class="num" id="s-ham" style="color:#22c55e">—</div><div class="lbl">Ham</div></div>
+      <div class="stat-box"><div class="num" id="s-rate">—</div><div class="lbl">Spam Rate</div></div>
+    </div>
+  </div>
+
+  <!-- Email Log -->
+  <div class="card">
+    <h2>📋 Classified Emails Log
+      <span style="float:right;display:flex;gap:8px">
+        <button onclick="loadEmails('all')"  style="padding:6px 14px;font-size:0.8rem">All</button>
+        <button onclick="loadEmails('spam')" style="padding:6px 14px;font-size:0.8rem;background:#ef4444">Spam</button>
+        <button onclick="loadEmails('ham')"  style="padding:6px 14px;font-size:0.8rem;background:#22c55e">Ham</button>
+      </span>
+    </h2>
+    <div id="email-log"><p class="loading">Click a filter above to load emails.</p></div>
+  </div>
+
+</div>
+
+<script>
+  const API = "/api";
+
+  async function classify() {
+    const subject = document.getElementById("subject").value;
+    const body    = document.getElementById("body").value;
+    const sender  = document.getElementById("sender").value;
+    const res     = document.getElementById("result");
+
+    if (!body.trim()) { alert("Please enter an email body."); return; }
+
+    res.style.display = "none";
+    const r = await fetch(`${API}/classify/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subject, body, sender })
+    });
+    const data = await r.json();
+
+    res.className = `result ${data.label}`;
+    res.style.display = "block";
+    res.innerHTML = `
+      <strong>${data.is_spam ? "🚨 SPAM DETECTED" : "✅ NOT SPAM"}</strong>
+      <span class="badge ${data.label}">${data.label.toUpperCase()}</span><br><br>
+      <span>Confidence: <strong>${(data.confidence * 100).toFixed(1)}%</strong></span>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <span>ID: <code>${data.id}</code></span>
+    `;
+    loadStats();
+    loadEmails('all');
+  }
+
+  async function loadStats() {
+    const r = await fetch(`${API}/stats/`);
+    const d = await r.json();
+    document.getElementById("s-total").textContent = d.total;
+    document.getElementById("s-spam").textContent  = d.spam;
+    document.getElementById("s-ham").textContent   = d.ham;
+    document.getElementById("s-rate").textContent  = (d.spam_rate * 100).toFixed(1) + "%";
+  }
+
+  async function loadEmails(filter) {
+    const url = filter === "all" ? `${API}/emails/` : `${API}/emails/?label=${filter}`;
+    const r   = await fetch(url);
+    const d   = await r.json();
+    const log = document.getElementById("email-log");
+
+    if (!d.emails.length) { log.innerHTML = "<p class='loading'>No emails found.</p>"; return; }
+
+    log.innerHTML = `
+      <table>
+        <thead><tr><th>Sender</th><th>Subject</th><th>Body</th><th>Label</th><th>Confidence</th></tr></thead>
+        <tbody>
+          ${d.emails.slice(-20).reverse().map(e => `
+            <tr>
+              <td>${e.sender}</td>
+              <td>${e.subject || "—"}</td>
+              <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.body}</td>
+              <td><span class="badge ${e.label}">${e.label}</span></td>
+              <td>${(parseFloat(e.confidence) * 100).toFixed(1)}%</td>
+            </tr>`).join("")}
+        </tbody>
+      </table>
+      <p class="loading" style="margin-top:10px">Showing last ${Math.min(d.emails.length, 20)} of ${d.total} emails</p>
+    `;
+  }
+
+  // Load stats on page open
+  loadStats();
+</script>
+</body>
+</html>
