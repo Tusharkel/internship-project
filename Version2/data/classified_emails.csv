@@ -2,3 +2,12 @@ id,subject,body,sender,label,confidence,flagged,created_at
 20260508195709253285,🎉 YOU HAVE BEEN SELECTED AS OUR LUCKY WINNER!,"Congratulations! You have won $1,000,000 in our international lottery. 
          Click here immediately to claim your free cash prize before it expires. 
          Act now! Limited time offer. Send your bank details to claim your reward.",,spam,0.99,False,2026-05-08T19:57:09.253317
+20260508200320612410,Buy Viagra & Cialis - 80% OFF! No prescription needed,"Cheap medications delivered to your door. Buy now and get free shipping. 
+         Guaranteed lowest price online. No doctor needed. 
+         Click here for discount pills. Special offer ends tonight!",,spam,0.99,False,2026-05-08T20:03:20.612442
+20260508200435506094,Invitation to event 2026,"Good morning sir/madam, we are at the venue
+Feel free to contact us",,ham,0.58,False,2026-05-08T20:04:35.506123
+20260508200544700177,URGENT - Confidential Business Proposal - $45 Million USD,"Dear friend, I am the son of a deposed Nigerian king. 
+         I need your help to transfer $45 million USD out of the country. 
+         You will receive 30% commission. Send me your bank account details urgently. 
+         This is 100% guaranteed and risk free. God bless you.",prince.daniel@nigerianroyal.org,spam,0.74,False,2026-05-08T20:05:44.700205
